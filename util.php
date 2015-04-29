@@ -14,3 +14,9 @@ function stringToLatLng($string) {
     $array = preg_split("/ /",$string);
     return $array;
 }
+
+function labeledLatLng($string) {
+    $array = stringToLatLng($string);
+
+    return "lat: $array[0], lng: $array[1]";
+}

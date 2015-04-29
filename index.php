@@ -146,7 +146,7 @@ $needs = listNeeds();
             foreach ($needs as $need) {
                 print "<tr>";
                 print "<td>";
-                print $need->$who;
+                print $need->who;
                 print "</td>";
                 print "<td>";
                 print $need->item;
@@ -156,7 +156,7 @@ $needs = listNeeds();
                 print $need->amount;
                 print "</td>";
                 print "<td>";
-                print $need->location;
+                print labeledLatLng($need->location);
                 print "</td>";
                 print "<td>";
                 print $need -> extended_location;
