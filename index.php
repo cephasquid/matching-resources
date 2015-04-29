@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: me
+ * User: David Olsen
  * Date: 4/28/15
  * Time: 3:11 PM
  */
@@ -9,7 +8,6 @@
 require_once('Needs.php');
 session_start();
 $needs = listNeeds();
-
 ?>
 
 
@@ -38,38 +36,32 @@ $needs = listNeeds();
             })
                 .done(function(data) {
                     alert("done");
+                    window.location.reload();
+
                 })
                 .fail(function(data) {
                     alert("Please login");
-                })
+                });
         };
-    var fulfill_need = function() {
+    var fulfill_need = function(needID) {
+        var items =  {needID: needID};
+        $.ajax({
+            url: "fulfill_need.php",
+            type: "post",
+            data: items
+        })
+            .done(function(data) {
+                alert("done");
+                window.location.reload();
+
+            })
+            .fail(function(data) {
+                alert("Please login");
+            });
 
     };
     </script>
 
-    <script>
-            window.fbAsyncInit = function() {
-            FB.init({
-                appId      : '1640502432853116',
-                xfbml      : true,
-                version    : 'v2.3'
-            });
-        };
-
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
-    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-    </fb:login-button>
-
-    <div id="status">
-    </div>
 
 
        <form method="post" onsubmit="return false;">
@@ -85,8 +77,8 @@ $needs = listNeeds();
          <th>Amount</th>
          <th>Location </th>
          <th>Location Description</th>
-         <th>Fullfilled</th>
-         <th> By </th>
+         <th>Fulfilled</th>
+         <th> Fulfilled By </th>
        </thead>
        <tbody>
        <?php
@@ -110,13 +102,14 @@ $needs = listNeeds();
                 print $need -> extended_location;
                 print "</td>";
                 print "<td>";
-                print $need->fullfilled;
+                print $need->fulfilled;
                 print "</td>";
                 print "<td>";
-                print $need->beingFullfilledby;
+                print $need->fulfilledby;
                 print "</td>";
                 print "<td>";
-                print '<button onclick="fulfill_need();">FulFill This Need</button>';
+                $needid = $need->id;
+                print "<button onclick=\"fulfill_need($needid);\">Fulfill This Need</button>";
                 print "</td>";
 
                 print "</tr>";

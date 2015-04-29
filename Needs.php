@@ -1,4 +1,9 @@
 <?php
+/**
+ * User: David Olsen
+ * Date: 4/28/15
+ * Time: 3:11 PM
+ */
 
 require_once("database.php");
 
@@ -13,10 +18,10 @@ function addNeed($login,$what,$amount, $location,$extended_location) {
 
 }
 
-function addBeingFulfilled($login,$needID, $who) {
+function addBeingFulfilled($login,$needID) {
     $need = R::load('need', $needID);
-    $need->fullfilled = "true";
-    $need->beingFullfilledby = $who;
+    $need->fulfilled = "true";
+    $need->fulfilledby = $login;
     R::store($need);
 }
 
@@ -27,12 +32,12 @@ function listNeeds() {
 }
 
 function listUnfulfilled() {
-    $db_needs = R::find('need',' fullfilled is not null');
+    $db_needs = R::find('need',' fulfilled is not null');
     return $db_needs;
 }
 
 function listFulfilled() {
-    $db_needs = R::find('need', 'fullfilled is null');
+    $db_needs = R::find('need', 'fulfilled is null');
     return $db_needs;
 }
 

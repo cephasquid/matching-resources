@@ -5,7 +5,6 @@ $what = $_POST["item"];
 $amount = $_POST["amount"];
 $location_extended = $_POST["location_extended"];
 $login = $_SESSION["login"];
-$login = "yes";
 if($login) {
     addNeed($login, $what,$amount,"",$location_extended);
 }
