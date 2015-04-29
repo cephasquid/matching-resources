@@ -77,6 +77,7 @@ $needs = listNeeds();
 
     <script type="text/javascript">
 
+        var map;
         function initialize() {
 
             var mapOptions = {
@@ -84,10 +85,19 @@ $needs = listNeeds();
                 center: new google.maps.LatLng(-34.397, 150.644)
             };
 
-            var map = new google.maps.Map(document.getElementById('map-canvas'),
+            map = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
+
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = new google.maps.LatLng(position.coords.latitude,
+                        position.coords.longitude);
+                    map.setCenter(pos);
+                })
+            }
             google.maps.event.addListener(map, 'click', function(e) {
                 placeMarker(e.latLng, map);
+
             });
         }
         var marker = null;
