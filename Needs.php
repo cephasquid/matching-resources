@@ -12,6 +12,7 @@ function addNeed($login,$what,$amount, $location,$extended_location) {
     $need = R::dispense('need');
     $need -> item = $what;
     $need -> amount = $amount;
+    $need -> location = $location;
     $need -> extended_location = $extended_location;
     $need -> who = $login;
     R::store($need);

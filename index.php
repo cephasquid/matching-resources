@@ -4,8 +4,9 @@
  * Date: 4/28/15
  * Time: 3:11 PM
  */
-
+require_once("util.php");
 require_once('Needs.php');
+
 session_start();
 $needs = listNeeds();
 ?>
@@ -13,20 +14,32 @@ $needs = listNeeds();
 
 <html xmlns="http://www.w3.org/1999/html">
 <head>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
     <script src="http://connect.facebook.net/en_US/all.js"></script>
- </head>
-<body>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
 
     <script type="text/javascript">
 
+        var latlngString = function(lat,lng) {
+            return ""+lat+" "+lng;
+        };
         var add_need = function (event) {
+
+
 
             var items =  {
                 item: $('#item').val(),
                 amount: $('#amount').val(),
-                location_extended: $('#location_extended').val()
+                location_extended: $('#location_extended').val(),
+                location: latlngString($('#lat').val(), $('#lng').val())
             };
 
             $.ajax({
@@ -62,12 +75,49 @@ $needs = listNeeds();
     };
     </script>
 
+    <script type="text/javascript">
 
+        function initialize() {
 
+            var mapOptions = {
+                zoom: 4,
+                center: new google.maps.LatLng(-34.397, 150.644)
+            };
+
+            var map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+            google.maps.event.addListener(map, 'click', function(e) {
+                placeMarker(e.latLng, map);
+            });
+        }
+        var marker = null;
+        function placeMarker(position, map) {
+            if(marker) {
+                marker.setMap(null);
+            }
+            marker = new google.maps.Marker({
+                position: position,
+                map: map
+            });
+            console.log(position);
+            $("#lat").val(position.lat());
+            $("#lng").val(position.lng());
+            map.panTo(position);
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+</head>
+<body>
+
+    Add a new need
+
+    <div id="map-canvas" style="height: 25%; width: 25%"></div>
        <form method="post" onsubmit="return false;">
-           <input type="text" name="item" id="item"/> <br/>
-           <input type="text" name="amount" id="amount"/> <br/>
-           <input type="text" name="location_extended" id="location_extended"/> <br/>
+           Item: <input type="text" name="item" id="item"/> <br/>
+           Amount (with units) <input type="text" name="amount" id="amount"/> <br/>
+           Latitude: <input type="text" name="lat" id="lat"/><br/>
+           Longitude: <input type="text" name="lng" id="lng"/> <br/>
+           Location description: <input type="text" name="location_extended" id="location_extended"/> <br/>
            <button onclick="add_need();">Add a need</button>
        </form>
    <table>

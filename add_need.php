@@ -4,9 +4,11 @@ require_once("Needs.php");
 $what = $_POST["item"];
 $amount = $_POST["amount"];
 $location_extended = $_POST["location_extended"];
+$location = $_POST["location"];
 $login = $_SESSION["login"];
+$login = "bob";
 if($login) {
-    addNeed($login, $what,$amount,"",$location_extended);
+    addNeed($login, $what,$amount,$location,$location_extended);
 }
 else {
     http_response_code(403);
